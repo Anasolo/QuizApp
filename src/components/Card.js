@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Card() {
   let history = useHistory();
   const classes = useStyles();
-  const [age, setAge] = useState("");
   const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState();
   const [difficulty, setDifficulty] = useState();
@@ -42,8 +41,7 @@ export default function Card() {
   };
 
   const handleSubmit = () => {
-    history.push(`/Quiz/${category}/${difficulty}/${addNumber}`);
-    console.log("aaavto", addNumber);
+    history.push(`/Quiz/${category}/${difficulty}/${addNumber}`)
   };
 
   //get data
