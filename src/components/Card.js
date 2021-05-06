@@ -25,9 +25,9 @@ export default function Card() {
   let history = useHistory();
   const classes = useStyles();
   const [categoryData, setCategoryData] = useState([]);
-  const [category, setCategory] = useState();
-  const [difficulty, setDifficulty] = useState();
-  const [addNumber, setAddNumber] = useState();
+  const [category, setCategory] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+  const [addNumber, setAddNumber] = useState("");
 
   const handleCategory = (e) => {
     setCategory(e.target.value);
@@ -40,15 +40,15 @@ export default function Card() {
     setAddNumber(e.target.value);
   };
 
-  const handleSubmit = () => {
-    history.push(`/Quiz/${category}/${difficulty}/${addNumber}`)
+  const handleSubmit = (event) => {
+    history.push(`/Quiz/${category}/${difficulty}/${addNumber}`);
   };
 
   //get data
   useEffect(async () => {
     var data = await axios.get(`https://opentdb.com/api_category.php`);
 
-    console.log("category", data.data.trivia_categories);
+    console.log("data", data.data.trivia_categories);
 
     setCategoryData(data.data.trivia_categories);
   }, []);
@@ -61,7 +61,7 @@ export default function Card() {
       }}
     >
       <h1>Get Questions:</h1>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl variant="outlined" className={classes.formControl} required>
         <InputLabel id="demo-simple-select-outlined-label">
           Select Category:
         </InputLabel>
@@ -80,7 +80,7 @@ export default function Card() {
         </Select>
       </FormControl>
 
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl variant="outlined" className={classes.formControl} required>
         <InputLabel id="demo-simple-select-outlined-label">
           Select Difficulty:
         </InputLabel>
@@ -105,17 +105,23 @@ export default function Card() {
           variant="outlined"
           value={addNumber}
           onChange={handleAddNumber}
+          required
         />
       </FormControl>
-
-      <Button
-        style={{ marginLeft: "8px" }}
-        variant="contained"
-        color="secondary"
-        onClick={() => handleSubmit()}
-      >
-        SUBMIT
-      </Button>
+      {category && difficulty && addNumber ? (
+        <Button
+          style={{ marginLeft: "8px" }}
+          variant="contained"
+          color="secondary"
+          onClick={() => handleSubmit()}
+        >
+          SUBMIT
+        </Button>
+      ) : (
+        <Button style={{ marginLeft: "8px" }} variant="contained" disabled>
+          SUBMIT
+        </Button>
+      )}
     </div>
   );
 }

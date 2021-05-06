@@ -19,13 +19,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
+var correctAnswers = [];
+var selectedAnswers = {};
 
 export default function Quiz({ setCorrectValue, setNumberOfValue }) {
-  let { categoryID, difficulty, number } = useParams();
+  let { categoryID, difficulty, number } = useParams(); //Parametres from Routing
   let history = useHistory();
   const classes = useStyles();
   const [questionData, setQuestionData] = useState([]);
   const [dataLoader, setDataLoader] = useState(false);
+
 
   //get data
   useEffect(async () => {
@@ -34,13 +37,31 @@ export default function Quiz({ setCorrectValue, setNumberOfValue }) {
     );
     setQuestionData(data.data.results);
     setDataLoader(true);
-  }, []);
-  const handleSubmit = () => {
-    setCorrectValue(777);
-    setNumberOfValue(number);
-    history.push(`/Answer`);
 
-    console.log("@avto");
+    correctAnswers = data.data.results.map((el) => el.correct_answer);
+    console.log("answers", correctAnswers);
+  }, []);
+
+  // What happens after clicking on SUBMIT button on the second page
+  const handleSubmit = () => {
+    console.log("answers", selectedAnswers, correctAnswers);
+    let count = 0;
+    for (let index = 0; index < correctAnswers.length; index++) {
+      if (selectedAnswers[index] == correctAnswers[index]) {
+        count++;
+      }
+    }
+    console.log("count", count);
+
+    setCorrectValue(count);
+    setNumberOfValue(number);
+
+    history.push(`/Answer`);
+  };
+  const handleChangeSelect = (key, answer) => {
+    console.log("avtooo", key, answer);
+
+    selectedAnswers[key] = answer;
   };
 
   return (
@@ -61,7 +82,10 @@ export default function Quiz({ setCorrectValue, setNumberOfValue }) {
               <InputLabel id="demo-simple-select-outlined-label">
                 Select Answer:
               </InputLabel>
-              <Select label="Select Answer">
+              <Select
+                label="Select Answer"
+                onChange={(e) => handleChangeSelect(key, e.target.value)}
+              >
                 <MenuItem key={key} value={question.correct_answer}>
                   {question.correct_answer}
                 </MenuItem>
@@ -85,15 +109,10 @@ export default function Quiz({ setCorrectValue, setNumberOfValue }) {
         color="primary"
         onClick={() => handleSubmit()}
       >
+        {/* Loader text untill data is loaded */}
+
         {dataLoader ? "SUBMIT" : "Loading..."}
       </Button>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
     </div>
   );
 }
