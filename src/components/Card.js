@@ -22,15 +22,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Card() {
-  let history = useHistory();
+  let history = useHistory(); //როუთი სამოძრაო
   const classes = useStyles();
-  const [categoryData, setCategoryData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]); //categoryData-ში ინახება კატეგორიები, map-ით ვხატავთ. setCategoryData ეს ავსებს კატეგორიებს.
   const [category, setCategory] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [addNumber, setAddNumber] = useState("");
 
   const handleCategory = (e) => {
-    setCategory(e.target.value);
+    setCategory(e.target.value); //e.target.value-ს target და value moyveba e-ს. ფროფერთიებია. e არის თუ რა ხდება onChange-ზე.
   };
 
   const handleDifficulty = (e) => {
@@ -41,7 +41,7 @@ export default function Card() {
   };
 
   const handleSubmit = (event) => {
-    history.push(`/Quiz/${category}/${difficulty}/${addNumber}`);
+    history.push(`/Quiz/${category}/${difficulty}/${addNumber}`); //გადადის ახალ როუტზე Quiz/7(id-თი ჩანს)/easy/12
   };
 
   //get data
@@ -67,7 +67,7 @@ export default function Card() {
         </InputLabel>
         <Select
           label="Select Category"
-          value={category}
+          value={category} // რასაც ავირჩევთ ჩამონათვალში ის რო გამოჩნდეს მნიშვნელობად.
           onChange={(e) => handleCategory(e)}
         >
           {categoryData.map((category, key) => {
@@ -108,7 +108,7 @@ export default function Card() {
           required
         />
       </FormControl>
-      {category && difficulty && addNumber ? (
+      {category && difficulty && addNumber ? ( // თუ სამივე True-ა(ანუ შევსებული), გამოჩნდება SUBMIT.
         <Button
           style={{ marginLeft: "8px" }}
           variant="contained"

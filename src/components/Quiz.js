@@ -23,45 +23,38 @@ var correctAnswers = [];
 var selectedAnswers = {};
 
 export default function Quiz({ setCorrectValue, setNumberOfValue }) {
-  let { categoryID, difficulty, number } = useParams(); //Parametres from Routing
+  let { categoryID, difficulty, number } = useParams(); //URL-დან მოაქვს პარამეტრები რომ აქ გამოვიყენოთ.
   let history = useHistory();
   const classes = useStyles();
   const [questionData, setQuestionData] = useState([]);
   const [dataLoader, setDataLoader] = useState(false);
-
 
   //get data
   useEffect(async () => {
     var data = await axios.get(
       `https://opentdb.com/api.php?amount=${number}&category=${categoryID}&difficulty=${difficulty}`
     );
-    setQuestionData(data.data.results);
-    setDataLoader(true);
+    setQuestionData(data.data.results); // აქსიოსით წამოვიღებთ არჩეულ სელექთებს, setQuestionData-ს მეშვეობით questionData-ში ჩავწერთ.
+    setDataLoader(true); //წამოღების შემდეგ dataLoader გახდება true და loading-ის მაგივრად იქნება submit.
 
     correctAnswers = data.data.results.map((el) => el.correct_answer);
-    console.log("answers", correctAnswers);
   }, []);
 
-  // What happens after clicking on SUBMIT button on the second page
+  //საბმითზე დაჭერისას რა ხდება
   const handleSubmit = () => {
-    console.log("answers", selectedAnswers, correctAnswers);
-    let count = 0;
+    let count = 0; //სწორი პასუხების რაოდენობას ვაგროვებთ.
     for (let index = 0; index < correctAnswers.length; index++) {
       if (selectedAnswers[index] == correctAnswers[index]) {
+        //თუ დაემთხვა ეს ორი ერთმანეთს
         count++;
       }
     }
-    console.log("count", count);
-
     setCorrectValue(count);
     setNumberOfValue(number);
-
     history.push(`/Answer`);
   };
   const handleChangeSelect = (key, answer) => {
-    console.log("avtooo", key, answer);
-
-    selectedAnswers[key] = answer;
+    selectedAnswers[key] = answer; //{0: "The Federation", 1: "False"} 1 False ამას ლოგავს.
   };
 
   return (

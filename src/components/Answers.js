@@ -2,9 +2,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 
+// App-დან მოაქვს ეს პარამეტრები.
 export default function Answer({ count, sum }) {
   let history = useHistory();
-
   const handleReset = () => {
     history.push(`/`);
   };
